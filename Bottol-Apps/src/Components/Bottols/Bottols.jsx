@@ -1,19 +1,36 @@
 import { useEffect, useState } from "react";
 import Bottol from "../Bottol/Bottol";
 import "./Bottols.css";
+import { addToLocalStorage, getStoredCart } from "../../Utilities/localstorage";
 
 const Bottols = () => {
   const [bottols, setBottols] = useState([]);
+  const [purches, setPurches] = useState([]);
+
   useEffect(() => {
     fetch("bottols.json")
       .then((res) => res.json())
       .then((data) => setBottols(data));
   }, []);
-  const [purches, setPurches] = useState([]);
+  // console.log("Called the use effect: ", bottols.length);
+
+  useEffect(() => {
+    if (bottols.length) {
+      const storedCard = getStoredCart();
+      const savecart = [];
+
+      for (const id of storedCard) {
+        const selectedBottol = bottols.find((bottol) => bottol.id === id);
+        savecart.push(selectedBottol);
+      }
+      setPurches(savecart);
+    }
+  }, [bottols]);
 
   const handelPurches = (bottol) => {
     const setnewBottols = [...purches, setPurches];
     setPurches([...purches, bottol]);
+    addToLocalStorage(bottol.id);
   };
 
   return (
