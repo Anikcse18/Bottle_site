@@ -1,6 +1,6 @@
 import PropTypes from "prop-types";
 import { BsBookmarks } from "react-icons/bs";
-const Blog = ({ blog }) => {
+const Blog = ({ blog, handelBookmark, handelTime }) => {
   const {
     cover,
     title,
@@ -9,13 +9,14 @@ const Blog = ({ blog }) => {
     posted_date,
     reading_time,
     hashtags,
+    id,
   } = blog;
 
   return (
     <div className="border-b-[1px] mb-8 pb-4">
       <img
         src={cover}
-        className="w-full"
+        className="w-full rounded-md"
         alt={`Cover Picture of the title ${title}`}
       />
       {/* Author Section */}
@@ -34,8 +35,13 @@ const Blog = ({ blog }) => {
         <div className="">
           <p className="flex items-center gap-[4px] text-gray-500">
             {reading_time} min read
-            <button>
-              <BsBookmarks />
+            <button
+              className="text-xl"
+              onClick={() => {
+                handelBookmark(blog);
+              }}
+            >
+              <BsBookmarks> </BsBookmarks>
             </button>
           </p>
         </div>
@@ -48,15 +54,21 @@ const Blog = ({ blog }) => {
           </span>
         ))}
       </div>
-      <a href="#" className="text-blue-700 underline ">
+
+      <button
+        className="text-blue-700 underline font-medium"
+        onClick={() => handelTime(reading_time, id)}
+      >
         Mark As Read
-      </a>
+      </button>
     </div>
   );
 };
 
 Blog.propTypes = {
   blog: PropTypes.object.isRequired,
+  handelBookmark: PropTypes.func,
+  handelTime: PropTypes.func,
 };
 
 export default Blog;
